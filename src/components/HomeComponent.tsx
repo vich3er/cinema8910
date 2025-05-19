@@ -2,9 +2,7 @@ import type {IFilm} from "../models/IFilm.ts";
 import {useEffect, useState} from "react";
 import {getAllFilms} from "../api-service/films.ts";
 import {FilmComponent} from "./FilmComponent.tsx";
-import {addDoc, collection} from "firebase/firestore";
-import {db} from "../firebase.tsx";
-import {addFilms, logFilmsSchedule} from "../db.ts";
+import {addFilms} from "../db.ts";
 
 export const HomeComponent = () => {
 
