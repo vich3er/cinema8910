@@ -2,9 +2,22 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getScreeningsByFilmId} from "../db.ts";
 import {SheduleComponent} from "../components/SheduleComponent.tsx";
-import type {ISession} from "../models/ISession.ts";
 
+export interface ICustomer {
+    id: string;
+    name: string;
+    phone: string;
+    email: string;
+}
 
+  export interface ISession {
+    date: string;
+    filmId: string;
+    filmName: string;
+    hall:2;
+    time: string;
+    seats: null [] & ICustomer[]
+}
 
 export const BookingPage = () => {
 
