@@ -12,7 +12,7 @@ export const routes = createBrowserRouter([
             {path: '', element: <HomePage/>},
 
             {
-                path: 'book',
+                path: 'book/:id',
                 element: <BookingPage />
             }
         ]

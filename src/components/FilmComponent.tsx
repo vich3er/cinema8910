@@ -7,12 +7,13 @@ interface FilmComponentProps {
     overview: string;
     release_date: string;
     vote_average: number;
+    id: string;
 }
 
-export const FilmComponent:FC<FilmComponentProps> = ({img, title, release_date, overview, vote_average}) => {
+export const FilmComponent:FC<FilmComponentProps> = ({img, title, release_date, overview, vote_average, id}) => {
    const navigate = useNavigate();
     const handleClick = () => {
-        navigate('/book')
+        navigate('/book/' + id)
     };
     return (
         <div className={'border rounded-lg p-3  ' }>
@@ -26,7 +27,6 @@ export const FilmComponent:FC<FilmComponentProps> = ({img, title, release_date, 
             <div className={'flex flex-col items-center'}>
                 <div>
                     <img  className={ 'p-5 w-[200px] object-cover'} src={img} alt={title}/>
-
                 </div>
                 <p>{overview}</p>
             </div>
