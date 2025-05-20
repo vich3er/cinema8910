@@ -1,13 +1,23 @@
 import type {ISession} from "../models/ISession";
-import {type FC, useEffect, useState} from "react";
+import {type FC, useState} from "react";
 import Modal from 'react-modal';
 import type {ISeat} from "../db.ts";
+import {useForm} from "react-hook-form";
+import {joiResolver} from "@hookform/resolvers/joi";
+import {userValidator} from "../validators/user.validator.ts";
 
 interface SessionCompProps {
     session: ISession;
 }
 
 Modal.setAppElement("#root");
+
+
+interface IFormProps {
+    phone: string;
+    email: string;
+    name: string;
+}
 
 
 export const SessionComponent: FC<SessionCompProps> = ({session}) => {
@@ -25,6 +35,23 @@ export const SessionComponent: FC<SessionCompProps> = ({session}) => {
 
     console.log(session);
     const seats = session.seats;
+
+
+
+
+    const customHandler = () => {
+
+    };
+
+    const {
+        handleSubmit,
+        register,
+        formState: {errors, isValid} } =
+        useForm<IFormProps>({
+        mode: 'all', resolver: joiResolver(userValidator)
+    })
+
+
     const chooseSeat = (seat: ISeat) => {
 let isReg = false;
 if (!isReg){
@@ -70,10 +97,20 @@ openLoginModal();
 
                 <div onClick={closeLoginModal} className={'relative h-50'}><span
                     className={'absolute top-0 right-0'}>&#215;</span></div>
-                <form>
-                    <input type="text" placeholder={'name'}/>
-                    <input type="text" placeholder={'email'}/>
-                    <input type="text" placeholder={'phone'}/>
+                <form onSubmit={handleSubmit(customHandler)}>
+                    <div>
+                        <input type="text" placeholder={'name'}  {...register('name')}/>
+                        {errors.name&& <p>{errors.name.message}</p>}
+                    </div>
+                    <div>
+                        <input type="text" placeholder={'email'} {...register('email')}/>
+                        {errors.email&& <p>{errors.email.message}</p>}
+                    </div>
+                    <div>
+                        <input type="text" placeholder={'phone'} {...register('phone')}/>
+                        {errors.phone&& <p>{errors.phone.message}</p>}
+
+                    </div>
                 </form>
 
             </Modal>

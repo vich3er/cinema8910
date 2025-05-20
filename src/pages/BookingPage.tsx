@@ -1,4 +1,4 @@
-import {useLinkClickHandler, useLocation, useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getFilmById, getScreeningsByFilmId} from "../db.ts";
 import Modal from 'react-modal';
