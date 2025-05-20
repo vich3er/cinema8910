@@ -1,10 +1,12 @@
-import type {ICustomer} from "./ICustomer.ts";
+
+import type {ISeat} from "../db.ts";
 
 export interface ISession {
+    id: string;
     date: string;
     filmId: string;
     filmName: string;
-    hall:2;
+    hall:number;
     time: string;
-    seats: null [] & ICustomer[]
+    seats:  ISeat[];
 }

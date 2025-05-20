@@ -12,7 +12,6 @@ export const MainPage = () => {
             </ul>
 
 
-
             <Outlet/>
         </div>
     );

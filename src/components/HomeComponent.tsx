@@ -2,7 +2,7 @@ import type {IFilm} from "../models/IFilm.ts";
 import {useEffect, useState} from "react";
 import {getAllFilms} from "../api-service/films.ts";
 import {FilmComponent} from "./FilmComponent.tsx";
-import {addFilms} from "../db.ts";
+import {addFilms, addFilmsInfo} from "../db.ts";
 
 export const HomeComponent = () => {
 
@@ -15,7 +15,7 @@ export const HomeComponent = () => {
         getAllFilms().then((films) => {
             setFilms(films);
             addFilms(films);
-
+            addFilmsInfo(films);
         });
 
     }, []);
@@ -43,7 +43,7 @@ export const HomeComponent = () => {
             {filmsArray.length > 0
                 ?
                 <div className={'grid  grid-cols-1 gap-3 p-3  sm:grid-cols-2 lg:grid-cols-4'}>
-                    {filmsArray.map((film) => <FilmComponent img={film.poster_path}
+                    {filmsArray.map((film) => <FilmComponent key={film.id} img={film.poster_path}
                                                              title={film.original_title}
                                                              overview={film.overview}
                                                              release_date={film.release_date}
