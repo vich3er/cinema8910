@@ -4,7 +4,8 @@ import {getFilmById, getScreeningsByFilmId, updateBookedSeats} from "../db.ts";
 import type {ISession} from "../models/ISession.ts";
 import type {IFilm} from "../models/IFilm.ts";
 import {SessionComponent} from "../components/SessionComponent.tsx";
-import type { ISeat } from "../models/ISeat.ts";
+import type {ISeat} from "../models/ISeat.ts";
+import {toast, ToastContainer} from "react-toastify";
 
 
 export const BookingPage = () => {
@@ -26,26 +27,29 @@ export const BookingPage = () => {
     console.log(sessions);
 
 
- const book = (chosedSeats: ISeat[], sessionId: string)=>{
-     sessions.map(session => {
-         if(session.id==sessionId){
-             const seats = session.seats;
-             for (const seat of seats) {
-                  for (const chosedSeat of chosedSeats) {
-                      if(seat.seat == chosedSeat.seat)
-                          seat.booked = chosedSeat.booked;
-                  }
+    const book = (chosedSeats: ISeat[], sessionId: string) => {
+        sessions.map(session => {
+            if (session.id == sessionId) {
+                const seats = session.seats;
+                for (const seat of seats) {
+                    for (const chosedSeat of chosedSeats) {
+                        if (seat.seat == chosedSeat.seat)
+                            seat.booked = chosedSeat.booked;
+                    }
 
-             }
-             updateBookedSeats(sessionId, session.seats).then();
-         }
+                }
 
-     })
+                updateBookedSeats(sessionId, session.seats)
+            }
 
- }
+
+        })
+
+    }
 
     return (
         <div className='flex flex-row'>
+            <ToastContainer/>
             <div className={'border rounded-lg p-3 w-270 '}>
                 <div>
                     <p className={'text-xl font-bold'}>{film?.original_title}</p>
@@ -66,7 +70,7 @@ export const BookingPage = () => {
                 </div>
                 <div>
                     <p>Casts</p>
-                    {film&& (
+                    {film && (
                         film.casts.map((item, i) => <p key={i}>{item.original_name}</p>)
                     )}
                 </div>

@@ -6,6 +6,7 @@ import {useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
 import {userValidator} from "../validators/user.validator.ts";
 import type {ICustomer} from "../models/ICustomer.ts";
+import {toast, ToastContainer} from "react-toastify";
 
 interface SessionCompProps {
     session: ISession;
@@ -38,7 +39,7 @@ export const SessionComponent: FC<SessionCompProps> = ({session, book}) => {
     console.log(session);
     const seats = session.seats;
 
-    const [choosedSeats, setChoosedSeats] = useState<ISeat[]>([])
+    const [choosenSeats, setChoosenSeats] = useState<ISeat[]>([])
 
 
     const customHandler = (formDataProps: IFormProps) => {
@@ -47,13 +48,17 @@ export const SessionComponent: FC<SessionCompProps> = ({session, book}) => {
             {name: formDataProps.name,
             phone: formDataProps.phone,
             email: formDataProps.email}
-        for (const chosenSeat of  choosedSeats) {
+        for (const chosenSeat of  choosenSeats) {
             chosenSeat.booked = user
         }
-
-        book(choosedSeats, session.id)
+        const numberOfChosenSeats = choosenSeats.map((s:ISeat)=> s.seat)
+const info = `For number ${formDataProps.phone} on date ${session.date} for movie ${session.filmName}, seats ${numberOfChosenSeats} are reserved`
+        book(choosenSeats, session.id)
         closeLoginModal();
         closeModal();
+        const notify = () => toast( info);
+        notify();
+
     };
 
     const {
@@ -75,18 +80,18 @@ export const SessionComponent: FC<SessionCompProps> = ({session, book}) => {
         //
         // }
 //      const newSeats = seats.map((s)=>s.seat==seat.seat? {...s, booked: {name: 's', email: 's', phone: 's'}}: s)
-        if (choosedSeats.some(s => s.seat == seat.seat)) {
-            const newSeats = choosedSeats.filter(s => s.seat !== seat.seat);
-            setChoosedSeats(newSeats);
+        if (choosenSeats.some(s => s.seat == seat.seat)) {
+            const newSeats = choosenSeats.filter(s => s.seat !== seat.seat);
+            setChoosenSeats(newSeats);
 
         } else {
-            const choosed = [...choosedSeats, seat];
-            setChoosedSeats(choosed);
+            const choosed = [...choosenSeats, seat];
+            setChoosenSeats(choosed);
             console.log(choosed);
         }
     };
     const btnColor = (seat: ISeat): string => {
-        if (choosedSeats.includes(seat)) {
+        if (choosenSeats.includes(seat)) {
             return 'bg-amber-300'
         } else return 'bg-gray-100'
     }
@@ -98,6 +103,7 @@ export const SessionComponent: FC<SessionCompProps> = ({session, book}) => {
     return (
 
         <>
+            <ToastContainer />
             <Modal isOpen={modalIsOpen}
                    onRequestClose={closeModal}
                    className="bg-white rounded p-6 w-[500px] outline-none"
