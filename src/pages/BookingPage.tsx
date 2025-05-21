@@ -1,10 +1,10 @@
-import { useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {getFilmById, getScreeningsByFilmId} from "../db.ts";
-import Modal from 'react-modal';
+import {getFilmById, getScreeningsByFilmId, updateBookedSeats} from "../db.ts";
 import type {ISession} from "../models/ISession.ts";
 import type {IFilm} from "../models/IFilm.ts";
 import {SessionComponent} from "../components/SessionComponent.tsx";
+import type { ISeat } from "../models/ISeat.ts";
 
 
 export const BookingPage = () => {
@@ -23,13 +23,26 @@ export const BookingPage = () => {
         }
 
     }, []);
-
-    useEffect(() => {
-
-    }, [sessions]);
+    console.log(sessions);
 
 
-    // console.log(film);
+ const book = (chosedSeats: ISeat[], sessionId: string)=>{
+     sessions.map(session => {
+         if(session.id==sessionId){
+             const seats = session.seats;
+             for (const seat of seats) {
+                  for (const chosedSeat of chosedSeats) {
+                      if(seat.seat == chosedSeat.seat)
+                          seat.booked = chosedSeat.booked;
+                  }
+
+             }
+             updateBookedSeats(sessionId, session.seats).then();
+         }
+
+     })
+
+ }
 
     return (
         <div className='flex flex-row'>
@@ -62,7 +75,7 @@ export const BookingPage = () => {
                 <p>Session schedule</p>
                 <span>price - 170grn</span>
                 <div className={'grid grid-rows-3 gap-1'}>
-                    {sessions.map((item, i) => <SessionComponent session={item} key={i} />)}
+                    {sessions.map((item, i) => <SessionComponent session={item} key={i} book={book}/>)}
                 </div>
             </div>
         </div>

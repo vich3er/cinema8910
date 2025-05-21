@@ -1,12 +1,8 @@
-import {addDoc, collection, getDocs, limit, orderBy, query, where} from "firebase/firestore";
+import {addDoc, collection, doc, getDocs, limit, orderBy, query, updateDoc, where} from "firebase/firestore";
 import {db} from "./firebase.tsx";
 import type {IFilm} from "./models/IFilm.ts";
-import type {ICustomer} from "./models/ICustomer.ts";
+import type {ISeat} from "./models/ISeat.ts";
 
-export interface ISeat {
-    seat: string;
-    booked: false | ICustomer
-}
 
 export const logFilmsSchedule = async () => {
     const querySnapshot = await getDocs(collection(db, "filmsSchedule"));
@@ -121,4 +117,9 @@ export const getFilmById = async (id: string) : Promise<IFilm | null> => {
         return doc.data() as IFilm;
     }
     else return null;
+}
+
+export const updateBookedSeats = async (sessionId: string,  seats: ISeat[]) => {
+const  sessionRef = doc(db,'hallSchedule' , sessionId);
+await updateDoc(sessionRef, {seats:seats });
 }
